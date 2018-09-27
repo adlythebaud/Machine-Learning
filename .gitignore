@@ -10,3 +10,7 @@ Importing_Data_Python_Cheat_Sheet\.pdf
 temp\.py
 
 *.txt
+
+*.pyc
+
+*__pycache__/
