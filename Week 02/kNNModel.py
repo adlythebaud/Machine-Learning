@@ -21,27 +21,40 @@ class kNNModel():
     def predict(self, X_test):        
         results = []
         
+        # 1. loop through all test inputs
         for x in range(np.shape(X_test)[0]):
-            closest = []
-            classes = np.zeros(len(np.unique(self.Y_train)))
             
+            # 2. array of closest neighbors
+            closest = []
+            
+            # 3. array of different classes and their frequencies, each index is a unique class.
+            classes = np.zeros(len(np.unique(self.Y_train)))            
+            
+            # 4. get distance from test input to each item in training set
             for i in range(len(self.datapoints)):               
+                
+                # 5. compute euclidean distance; this loops through all dimensions of training set
                 for j in range(np.shape(X_test)[1]):
                     distance = np.sqrt(np.sum((X_test[x][j] - self.datapoints[i].x[j])**2))
-                self.datapoints[i].distance = distance
-            self.datapoints.sort(key = lambda x: x.distance)
+                
+                # 6. set the distance from test point for each item in training set
+                self.datapoints[i].distance_from_test_point = distance
             
+            # 7. sort the datapoints in training set, so that nearest neighbors are on top
+            self.datapoints.sort(key = lambda x: x.distance_from_test_point)
             
+            # 8. get the k-nearest neighbors off the top of sorted training set
             for i in range(self.k):              
                closest.append(self.datapoints[i].y)
            
-            # determine most frequent class:
+            # 9. determine most frequent class:
             for i in range(len(closest)):
                 classes[closest[i]] += 1  
             
+            # 10. insert result of most frequent class into list
             results.append(np.argmax(classes))
             
-                                                  
+        # 11. return results
         return results
     
     
