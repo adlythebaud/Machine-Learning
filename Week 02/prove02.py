@@ -15,6 +15,7 @@ from sklearn import datasets
 from kNNClassifier import kNNClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
+import numpy as np
 
 iris = datasets.load_iris()
 x = iris.data
@@ -34,6 +35,7 @@ X_test = sc.transform(X_test)
 
 kNN = kNNClassifier(4)
 model = kNN.fit(X_train, Y_train)
+
 
 
 countCorrect = 0

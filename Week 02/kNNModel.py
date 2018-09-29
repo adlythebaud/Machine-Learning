@@ -25,14 +25,9 @@ class kNNModel():
             closest = []
             classes = np.zeros(len(np.unique(self.Y_train)))
             
-            for i in range(len(self.datapoints)):
-                #you could make this code better by not hardcoding columns
-                distance = np.sqrt(
-                        (X_test[x][0] - self.datapoints[i].x[0])**2 + 
-                        (X_test[x][1] - self.datapoints[i].x[1])**2 +
-                        (X_test[x][2] - self.datapoints[i].x[2])**2 +
-                        (X_test[x][3] - self.datapoints[i].x[3])**2)
-                
+            for i in range(len(self.datapoints)):               
+                for j in range(np.shape(X_test)[1]):
+                    distance = np.sqrt(np.sum((X_test[x][j] - self.datapoints[i].x[j])**2))
                 self.datapoints[i].distance = distance
             self.datapoints.sort(key = lambda x: x.distance)
             
