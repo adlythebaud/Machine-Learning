@@ -17,7 +17,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 
 # looping through possible k values.
-for i in range(2,10):
+for i in range(2,20):
     
     # 1. Get data
     iris = datasets.load_iris()
@@ -28,7 +28,7 @@ for i in range(2,10):
     
     # 3. train, test, split    
     X_train, X_test, Y_train, Y_test = train_test_split(
-            x, y, test_size = .3, random_state = 3)
+            x, y, test_size = .3, random_state = 0)
     
     # 4. feature Scaling
     sc = StandardScaler()
