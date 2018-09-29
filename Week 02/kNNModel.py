@@ -17,17 +17,13 @@ class kNNModel():
         self.datapoints = []
         for xt, yt in zip(self.X_train, self.Y_train):
             self.datapoints.append(DataPoint(xt, yt))
-
         
-        
-    def predict(self, X_test):
-        # Return an array of correct answers based off these test inputs (X_test)
-        # compute distance between X_test[i] and points
-        # get distances between X_train and X_test:
-        closest = []
+    def predict(self, X_test):        
         results = []
+        
         for x in range(np.shape(X_test)[0]):
-            
+            closest = []
+            classes = np.zeros(len(np.unique(self.Y_train)))
             
             for i in range(len(self.datapoints)):
                 #you could make this code better by not hardcoding columns
@@ -41,8 +37,21 @@ class kNNModel():
             self.datapoints.sort(key = lambda x: x.distance)
             
             
-            for i in range(self.k):
+            for i in range(self.k):              
                closest.append(self.datapoints[i].y)
            
-            # determine most frequent class:                                                                   
-        return closest
+            # determine most frequent class:
+            for i in range(len(closest)):
+                classes[closest[i]] += 1  
+            
+            results.append(np.argmax(classes))
+            
+                                                  
+        return results
+    
+    
+    
+    
+    
+    
+    

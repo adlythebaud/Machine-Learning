@@ -10,27 +10,38 @@ INTENTION: Create a K-Nearest Neighbors Classifier and Model,
     classifier will fit data and model will predict.
 """
 
-import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn import datasets
 from kNNClassifier import kNNClassifier
-import numpy as np
-
 
 iris = datasets.load_iris()
 x = iris.data
+#y = iris.target
 y = []
 for t in iris.target:
     y.append(iris.target_names[t])
 
 
 X_train, X_test, Y_train, Y_test = train_test_split(
-        x, y, test_size = .3, random_state = 37)
+        x, y, test_size = .3, random_state = 43)
 
 kNN = kNNClassifier(5)
 model = kNN.fit(X_train, Y_train)
 
-#print(model.predict(X_test))
 
+countCorrect = 0
 for xt, prediction, yt in zip(X_test, model.predict(X_test), Y_test):
-    print(xt, ": ", prediction, " | ", yt)
+#    print(xt, iris.target_names[prediction], iris.target_names[yt])
+    if prediction == yt:
+        countCorrect += 1
+        
+print("Accuracy = ", round(countCorrect/len(Y_test) * 100, 2), "%")
+
+    
+    
+    
+    
+    
+    
+    
+    
