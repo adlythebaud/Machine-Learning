@@ -9,8 +9,6 @@ Importing_Data_Python_Cheat_Sheet\.pdf
 
 temp\.py
 
-*.txt
-
 *.pyc
 
 __pycache__/
@@ -21,3 +19,9 @@ Week 03/Teach 03 - Team Formation
 Week 03/adult_data\.csv
 
 Week 03/adult_test\.csv
+
+Week 01/prove01\.txt
+
+Week 02/prove02\.txt
+
+Week 03/Teach 03 - Team Formation\.txt
