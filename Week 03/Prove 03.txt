@@ -1,0 +1,37 @@
+When your assignment is complete, please answer the questions in this text file and upload it to I-Learn.
+
+1. Please provide the URL of your public GitHub repository.
+https://github.com/adlythebaud/Machine-Learning/tree/master/Week%2003
+
+2. What was the most difficult part of this assignment?
+The most difficult part was handling missing data and knowing how to use the KNN Regressor
+
+3. Briefly describe your process for handling non-numeric data.
+For handling non numeric data, I used a label encoder to quantify each value.
+
+4. Briefly describe your process for missing data.
+I used the mode of each column to fill in missing data.
+
+5. Describe your results for the Car Evaluation dataset.
+I had accuracy ranging from 89 - 93%
+
+6. Describe your results for the Pima Indian dataset.
+I had accuracy ranging from 90-97%
+
+7. Describe your results for the Automobile MPG dataset.
+I had very low accuracy, I don't think I used this dataset as well as I could have.
+
+8. Describe anything you did to go above and beyond the minimum standard requirements.
+
+
+9. Please select the category you feel best describes your assignment: C
+A - Some attempt was made
+B - Developing, but significantly deficient
+**** C - Slightly deficient, but still mostly adequate ****
+D - Meets requirements
+E - Shows creativity and excels above and beyond requirements
+
+
+10. Provide a brief justification (1-2 sentences) for selecting that category.
+I was able to load all three data sets, clean up the data and get them ready for training. However,
+I took the same approach to all three datasets, and didn't use the regressor the right way.
