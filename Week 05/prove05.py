@@ -23,13 +23,23 @@ from sklearn import datasets
 from collections import Counter
 import numpy as np
 import pandas as pd
-from scipy.stats import mode
+from scipy.stats import mode, itemfreq
 
-def calc_entropy(p):
+def entropy(p):
     if p != 0:
         return (-1 * p * np.log2(p))
     else:
         return 0
+
+# create function to calculate a column's entropy
+def column_entropy(column):
+    sum_entropy = 0
+    for i in np.unique(column, return_counts = True)[1]:
+        sum_entropy += entropy(i / len(column))
+    return sum_entropy
+
+
+
 
 # 1. Get system entropy
 # Get a test dataset.
@@ -53,7 +63,15 @@ x = df.iloc[:,1:].values
 y = df.iloc[:,:1].values
 
 
-print(y)    
+#print(np.unique(y, return_counts = True))
+a = np.unique(y, return_counts = True)
+print(a[1])
+
+print(column_entropy(y))
+
+
+
+    
 #print(Counter(y).keys())
 #print(Counter(y).values())
 
