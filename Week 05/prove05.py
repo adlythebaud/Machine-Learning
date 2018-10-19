@@ -43,7 +43,7 @@ def column_entropy(column):
 
 # 1. Get system entropy
 # Get a test dataset.
-df = pd.read_csv('voting_data.csv', na_values = '?', 
+df = pd.read_csv('voting_data.csv', 
                       names = ['class_name', 'handicapped_infants',
                                'water_project_cost_sharing', 'adoption_of_the_budget_resolution',
                                'physician-fee-freeze', 'el-salvador-aid', 
@@ -54,32 +54,36 @@ df = pd.read_csv('voting_data.csv', na_values = '?',
                                'duty-free-exports', 'export-administration-act-south-africa'])
 
 df = df.applymap(str)
-values = {}
+
+# df.replace({'column-to-check': {'value-to-look-for': 'replacement'}})
 for column in df:
-    values.update({column: mode(df[column], nan_policy = 'omit').mode[0]})
-df = df.fillna(value = values)
+    df = df.replace({column: {'?': mode(df[column], nan_policy = 'omit').mode[0]}})
+ 
 # split data into x and y
 x = df.iloc[:,1:].values
 y = df.iloc[:,:1].values
 
 
-#print(np.unique(y, return_counts = True))
-a = np.unique(y, return_counts = True)
-print(a[1])
+e_start = column_entropy(df.iloc[:,:1])
 
-print(column_entropy(y))
+# 2. Calculate information gain to determine root node.
+#   calculate entropy of all columns
+for i in df.columns:
+    if i == df.iloc[:,:1].columns[0]:
+        continue
+    else:
+        # CALCULATE ENTROPY OF THE COLUMNS
+        
+        # branches are unique values of the column
+        
+        # get unique values of column to iterate over.
+        for j in np.unique(df[i].values):
+            
+            # get the rows that are equal to the branch (unique value)
+            rows = df.loc[df[i] == j]
+        
+            # calculate the entropy of the target class among those rows.
+            print(i, j, column_entropy(rows.iloc[:,:1]))
 
 
-
-    
-#print(Counter(y).keys())
-#print(Counter(y).values())
-
-#system_entropy = 0
-#for i in Counter(y).values():
-#    system_entropy += calc_entropy(i / len(y))
-#    
-## 2. Calculate information gain to determine root node.
-#for i in x:
-#    print(i)
 
