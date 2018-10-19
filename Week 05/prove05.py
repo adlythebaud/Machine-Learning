@@ -19,11 +19,12 @@ Else
         Create a subset of the examples for each branch
         Recursively call the function to create a new node at that branch        
 """
-from sklearn import datasets
-from collections import Counter
+
 import numpy as np
 import pandas as pd
-from scipy.stats import mode, itemfreq
+from Node import Node
+from scipy.stats import mode
+from operator import attrgetter
 
 def entropy(p):
     if p != 0:
@@ -68,7 +69,10 @@ e_start = column_entropy(df.iloc[:,:1])
 
 # 2. Calculate information gain to determine root node.
 #   calculate entropy of all columns
+entropies = []
 for i in df.columns:
+    
+    # if we've already made the column into a node, continue
     if i == df.iloc[:,:1].columns[0]:
         continue
     else:
@@ -77,13 +81,20 @@ for i in df.columns:
         # branches are unique values of the column
         
         # get unique values of column to iterate over.
+        a = []
         for j in np.unique(df[i].values):
             
             # get the rows that are equal to the branch (unique value)
             rows = df.loc[df[i] == j]
+            
+            # calculate the entropy of the target class among those rows (of the branch)
+            # get weighted average of entropies among branches of column, add to entropies list
+            a.append((len(rows) / len(df[i].values)) * (column_entropy(rows.iloc[:,:1])))
         
-            # calculate the entropy of the target class among those rows.
-            print(i, j, column_entropy(rows.iloc[:,:1]))
+        entropies.append(Node(entropy = np.sum(a), column = i))
 
 
+# this column has the lowest entropy, so it will be our root node. 
+root = min(entropies, key = attrgetter('entropy'))
 
+# now to get child nodes....
