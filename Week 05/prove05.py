@@ -74,24 +74,17 @@ def info_gain(dframe):
     entropies = []
     for i in dframe.columns:
         
-        # if we've already made the column into a node, continue
-        if i == dframe.iloc[:,:1].columns[0]:
-            continue
-        else:
-            # CALCULATE ENTROPY OF THE COLUMNS
+        # CALCULATE ENTROPY OF THE COLUMNS        
+        # get unique values of column to iterate over.
+        a = []
+        for j in np.unique(df[i].values):
             
-            # branches are unique values of the column
+            # get the rows that are equal to the branch (unique value)
+            rows = dframe.loc[df[i] == j]
             
-            # get unique values of column to iterate over.
-            a = []
-            for j in np.unique(df[i].values):
-                
-                # get the rows that are equal to the branch (unique value)
-                rows = dframe.loc[df[i] == j]
-                
-                # calculate the entropy of the target class among those rows (of the branch)
-                # get weighted average of entropies among branches of column, add to entropies list
-                a.append((len(rows) / len(dframe[i].values)) * (column_entropy(rows.iloc[:,:1])))
+            # calculate the entropy of the target class among those rows (of the branch)
+            # get weighted average of entropies among branches of column, add to entropies list
+            a.append((len(rows) / len(dframe[i].values)) * (column_entropy(rows.iloc[:,:1])))
             
             entropies.append(Node(entropy = np.sum(a), column = i))
     # this column has the lowest entropy, so it will be our root node.
@@ -104,17 +97,6 @@ print(info_gain(df))
 
 
 # now to get child nodes....
-def recur(n):
-    if n == 0:
-        return 1
-    else:
-        print("from recur: ", n)
-        return n * recur(n - 1) #once this is done executing, it will go to the next line.
-
-# I want this to create a node, and then set it's child node to be the next column
-# if there are no more columns, return nil...?        
-#def create_tree(df.columns):
-
 
 def make_tree(df):
     # if all examples have the same label, return leaf with that label.
@@ -125,11 +107,19 @@ def make_tree(df):
         return mode(df.iloc[:].values, nan_policy = 'omit').mode[0]
     else:
         # calculate info gain and create node for that feature.        
-        node = info_gain(df)
-        df = df.drop([node.column], axis = 1)
-
+        node = info_gain(df) #where do I set it's parent??!?
         
+        # create branches/edges for possible values of new Node
+        node.branches = np.unique(df[node.column].values)
+            
+        # create a subset of examples that have this value    
+        for i in node.branches:
+            df = df.loc[df[node.column] == i]
+            df = df.drop([node.column], axis = 1)
+            make_tree(df)
 make_tree(df)
+
+
 
 
         
