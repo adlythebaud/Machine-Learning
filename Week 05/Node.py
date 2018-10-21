@@ -10,6 +10,13 @@ class Node():
     def __init__(self, entropy = 0, column = ""):
         self.entropy = entropy
         self.column = column
+        self.children = []
+        self.parent = ""
+        
+        
+
         
     def __repr__(self):
         return "%s, %s" % (self.column, self.entropy)
+    
+    

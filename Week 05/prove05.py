@@ -64,37 +64,83 @@ for column in df:
 x = df.iloc[:,1:].values
 y = df.iloc[:,:1].values
 
-
 e_start = column_entropy(df.iloc[:,:1])
 
 # 2. Calculate information gain to determine root node.
 #   calculate entropy of all columns
-entropies = []
-for i in df.columns:
-    
-    # if we've already made the column into a node, continue
-    if i == df.iloc[:,:1].columns[0]:
-        continue
-    else:
-        # CALCULATE ENTROPY OF THE COLUMNS
-        
-        # branches are unique values of the column
-        
-        # get unique values of column to iterate over.
-        a = []
-        for j in np.unique(df[i].values):
-            
-            # get the rows that are equal to the branch (unique value)
-            rows = df.loc[df[i] == j]
-            
-            # calculate the entropy of the target class among those rows (of the branch)
-            # get weighted average of entropies among branches of column, add to entropies list
-            a.append((len(rows) / len(df[i].values)) * (column_entropy(rows.iloc[:,:1])))
-        
-        entropies.append(Node(entropy = np.sum(a), column = i))
+df_copy = df
 
+def info_gain(dframe):
+    entropies = []
+    for i in dframe.columns:
+        
+        # if we've already made the column into a node, continue
+        if i == dframe.iloc[:,:1].columns[0]:
+            continue
+        else:
+            # CALCULATE ENTROPY OF THE COLUMNS
+            
+            # branches are unique values of the column
+            
+            # get unique values of column to iterate over.
+            a = []
+            for j in np.unique(df[i].values):
+                
+                # get the rows that are equal to the branch (unique value)
+                rows = dframe.loc[df[i] == j]
+                
+                # calculate the entropy of the target class among those rows (of the branch)
+                # get weighted average of entropies among branches of column, add to entropies list
+                a.append((len(rows) / len(dframe[i].values)) * (column_entropy(rows.iloc[:,:1])))
+            
+            entropies.append(Node(entropy = np.sum(a), column = i))
+    # this column has the lowest entropy, so it will be our root node.
+    root = min(entropies, key = attrgetter('entropy'))
+        
+    # return the node.
+    return root
 
-# this column has the lowest entropy, so it will be our root node. 
-root = min(entropies, key = attrgetter('entropy'))
+print(info_gain(df))
+
 
 # now to get child nodes....
+def recur(n):
+    if n == 0:
+        return 1
+    else:
+        print("from recur: ", n)
+        return n * recur(n - 1) #once this is done executing, it will go to the next line.
+
+# I want this to create a node, and then set it's child node to be the next column
+# if there are no more columns, return nil...?        
+#def create_tree(df.columns):
+
+
+def make_tree(df):
+    # if all examples have the same label, return leaf with that label.
+    if len(np.unique(df.iloc[:,:1].values)) == 1:
+        return np.unique(df.iloc[:,:1].values)
+    # if there are no features left, return leaf with most common label among data.
+    elif len(df.columns) == 0:
+        return mode(df.iloc[:].values, nan_policy = 'omit').mode[0]
+    else:
+        # calculate info gain and create node for that feature.        
+        node = info_gain(df)
+        df = df.drop([node.column], axis = 1)
+
+        
+make_tree(df)
+
+
+        
+                         
+        
+
+
+
+    
+
+
+
+
+
