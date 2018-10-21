@@ -123,21 +123,31 @@ def make_tree(data_frame):
         
         # create branches/edges for possible values of new Node
         node.branches = np.unique(data_frame[node.column].values)
-            
+        tree = Node()
+        sub_tree = Node()
         # create a subset of examples that have this value    
         for i in node.branches:
             data_frame = data_frame.loc[df[node.column] == i]
             
-            data_frame = data_frame.drop([node.column], axis = 1)            
-            return make_tree(data_frame)
-        
-        # set the next node's parent to current node...
-        # set current node's child to next node..
+            # this is getting dropped too soon, because it needs to recurse up a level!
+            data_frame = data_frame.drop([node.column], axis = 1)
+#            print(node.column)
+            
+            sub_tree = make_tree(data_frame)
+            tree.column = node.column
+            tree.subtree = sub_tree
 
-print(make_tree(df))
+            # set the next node's parent to current node...
+            # set current node's child to next node..
+        
+        return tree
+
+tree = make_tree(df)
+print(tree)
+
 
 #testing tree traversal. Might have an error in thinking there's more to do.
-def tree_test(data_frame):
+def recursion_test(data_frame):
     
     # if all examples have the same label, return leaf with that label.
     if len(np.unique(data_frame.iloc[:,:1].values)) == 1:
@@ -153,10 +163,31 @@ def tree_test(data_frame):
         # calculate info gain and create node for that feature.        
         node = info_gain(data_frame) #where do I set it's parent??!?
         data_frame = data_frame.drop([node.column], axis = 1)                
+        
         return tree_test(data_frame)       
 
 
-#print(tree_test(df))
+def tree_test(data_frame):  
+    # if all examples have the same label, return leaf with that label.
+    if len(np.unique(data_frame.iloc[:,:1].values)) == 1:
+        print('all examples have the same label')
+        return np.unique(data_frame.iloc[:,:1].values)
+    
+    # if there are no features left, return leaf with most common label among data.
+    elif len(data_frame.columns) == 1:
+        print('no features left')
+        print(data_frame.shape)
+        return mode(data_frame.iloc[:,0:].values, nan_policy = 'omit').mode[0]
+    else:
+        # calculate info gain and create node for that feature.        
+        node = info_gain(data_frame) #where do I set it's parent??!?
+        data_frame = data_frame.drop([node.column], axis = 1)                
+        sub_tree = tree_test(data_frame)
+        
+        tree = Node(column = node.column, subtree = sub_tree)
+        print(tree.column)
+        return tree
+    
 
         
                          
