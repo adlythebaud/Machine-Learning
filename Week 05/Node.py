@@ -12,6 +12,7 @@ class Node():
         self.column = column
         self.branches = []
         self.parent = ""
+        self.child = ""
         
         
 

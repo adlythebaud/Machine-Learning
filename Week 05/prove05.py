@@ -61,30 +61,37 @@ for column in df:
     df = df.replace({column: {'?': mode(df[column], nan_policy = 'omit').mode[0]}})
  
 # split data into x and y
-x = df.iloc[:,1:].values
-y = df.iloc[:,:1].values
+x = df.iloc[:,1:]
+y = df.iloc[:,:1]
+
 
 e_start = column_entropy(df.iloc[:,:1])
 
 # 2. Calculate information gain to determine root node.
 #   calculate entropy of all columns
-df_copy = df
 
 def info_gain(dframe):
     entropies = []
     for i in dframe.columns:
         
-        # CALCULATE ENTROPY OF THE COLUMNS        
-        # get unique values of column to iterate over.
-        a = []
-        for j in np.unique(df[i].values):
+        # if we've already made the column into a node, continue
+        if i == dframe.iloc[:,:1].columns[0]:
+            continue
+        else:
+            # CALCULATE ENTROPY OF THE COLUMNS
             
-            # get the rows that are equal to the branch (unique value)
-            rows = dframe.loc[df[i] == j]
+            # branches are unique values of the column
             
-            # calculate the entropy of the target class among those rows (of the branch)
-            # get weighted average of entropies among branches of column, add to entropies list
-            a.append((len(rows) / len(dframe[i].values)) * (column_entropy(rows.iloc[:,:1])))
+            # get unique values of column to iterate over.
+            a = []
+            for j in np.unique(df[i].values):
+                
+                # get the rows that are equal to the branch (unique value)
+                rows = dframe.loc[df[i] == j]
+                
+                # calculate the entropy of the target class among those rows (of the branch)
+                # get weighted average of entropies among branches of column, add to entropies list
+                a.append((len(rows) / len(dframe[i].values)) * (column_entropy(rows.iloc[:,:1])))
             
             entropies.append(Node(entropy = np.sum(a), column = i))
     # this column has the lowest entropy, so it will be our root node.
@@ -104,7 +111,7 @@ def make_tree(df):
         return np.unique(df.iloc[:,:1].values)
     # if there are no features left, return leaf with most common label among data.
     elif len(df.columns) == 0:
-        return mode(df.iloc[:].values, nan_policy = 'omit').mode[0]
+        return mode(df.iloc[:,:1].values, nan_policy = 'omit').mode[0]
     else:
         # calculate info gain and create node for that feature.        
         node = info_gain(df) #where do I set it's parent??!?
@@ -115,12 +122,40 @@ def make_tree(df):
         # create a subset of examples that have this value    
         for i in node.branches:
             df = df.loc[df[node.column] == i]
+            
             df = df.drop([node.column], axis = 1)
+            print(node.column)
+
+            print()
+            print(df.columns)
             make_tree(df)
-make_tree(df)
+#            print(df.columns)
+        
+        # set the next node's parent to current node...
+        # set current node's child to next node..
+#        return node
+#make_tree(df)
+
+#testing tree traversal. Might have an error in thinking there's more to do.
+def tree_test(data_frame):
+    
+    # if all examples have the same label, return leaf with that label.
+    if len(np.unique(data_frame.iloc[:,:1].values)) == 1:
+        return np.unique(data_frame.iloc[:,:1].values)
+    
+    # if there are no features left, return leaf with most common label among data.
+    elif len(data_frame.columns) == 0:
+        return mode(data_frame.iloc[:,:1].values, nan_policy = 'omit').mode[0]
+   
+    else:
+        # calculate info gain and create node for that feature.        
+        node = info_gain(data_frame) #where do I set it's parent??!?
+        data_frame = data_frame.drop([node.column], axis = 1)                
+        print(data_frame.columns)
+        tree_test(data_frame)       
 
 
-
+tree_test(df)
 
         
                          
