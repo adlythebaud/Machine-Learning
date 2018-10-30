@@ -19,6 +19,7 @@ from sklearn import datasets
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 import random
+from Node import Node
 
 
 # 1. Get data
@@ -45,15 +46,22 @@ X_test = sc.transform(X_test)
 weights = []
 for i in range(X_train.shape[1]):
     weights.append(random.uniform(-1,1))
-
-# 6. Get outputs for each entry (this is for one node, let's see if it's setosa)
-for i in range(X_train.shape[0]):
-    tempSum = 0
-    for j in range(len(weights)):
-        tempSum+= (X_train[i][j] * weights[j])
     
-    # get the result for training instance:
-    # if y_train[i] = setosa, if tempSum > 0
+# 6. Initialize our learning rate, eta
+eta = 0.0453
+
+# 7. TRAIN. 
+# Update weights (for how long?) (this is for one node, let's see if it's setosa)
+# how do we determine for setosa if we get a 1 or zero?
+
+# how to account for bias node?
+# TODO: Account for Bias Node
+# Train node ONLY on setosa data
+node = Node(eta = eta, T = 5)
+node.set_weights(weights)
+node.fit(X_train)
+#node.predict(X_test)
+
     
 
     
