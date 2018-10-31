@@ -29,8 +29,6 @@ iris = datasets.load_iris()
 x = iris.data
 y = iris.target
 
-print(iris.target_names)
-
 # 3. train, test, split    
 X_train, X_test, Y_train, Y_test = train_test_split(
         x, y, test_size = .3, random_state = 0)
@@ -61,6 +59,18 @@ node = Node(eta = eta, T = 5)
 node.set_weights(weights)
 node.fit(X_train)
 #node.predict(X_test)
+
+# create n nodes for n target classes:
+nodes = []
+for i in np.unique(Y_train):
+    nodes.append(Node(target_class = i, T = 5))
+
+# train each node using training data whose target class = i.target_class
+
+zipped = zip(X_train, Y_train)
+
+#for i in zipped:
+#    print(i[1])    
 
     
 
