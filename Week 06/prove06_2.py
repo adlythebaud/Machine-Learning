@@ -49,30 +49,29 @@ for i in range(X_train.shape[1]):
 eta = 0.0453
 
 # 7. TRAIN. 
-# Update weights (for how long?) (this is for one node, let's see if it's setosa)
-# how do we determine for setosa if we get a 1 or zero?
-
-# how to account for bias node?
-# TODO: Account for Bias Node
-# Train node ONLY on setosa data
-node = Node(eta = eta, T = 5)
-node.set_weights(weights)
-node.fit(X_train)
-#node.predict(X_test)
-
 # create n nodes for n target classes:
 nodes = []
 for i in np.unique(Y_train):
     nodes.append(Node(target_class = i, T = 5))
 
-# train each node using training data whose target class = i.target_class
-
 zipped = zip(X_train, Y_train)
+zipped = list(zipped)
 
-#for i in zipped:
-#    print(i[1])    
+for node in nodes:
+    # get training data
+    training_data = []
+    for zip_item in zipped:
+        if zip_item[1] == node.target_class:
+            training_data.append(zip_item[0])
+    
+    # fit data to each node's model
+    node.set_weights(weights)
+    node.fit(training_data)
+    node.predict(X_test)
 
     
-
+    
+    
+    
     
     
