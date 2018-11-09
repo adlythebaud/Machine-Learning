@@ -45,17 +45,26 @@ layers = [3,1]
 
 # 6. Create weights for each node in each layer
 weights = []
-
+print(np.asarray(weights).shape)
 for layer in layers:
     # loop through each node, add a weight for every input from previous layer
     print("layer: ", layer)
+    print(layers.index(layer))
     layer_weights = []
     for i in range(layer):
         node_weights = []        
         # this for loop only needs to happen once. 
         # TODO: Make this for loop happen only if we haven't created weights for first hidden layer.
-        for j in range(X_train.shape[1] + 1):
-            node_weights.append(random.uniform(0,1))
+
+        # if layer.index == 0.... 
+        if layers.index(layer) == 0:
+            for j in range(X_train.shape[1] + 1):
+                node_weights.append(random.uniform(0,1))
+        
+        # else:....
+        # make weights for every node in PREVIOUS layer
+        
+        
         layer_weights.append(node_weights)
     print("layer_weights: ", layer_weights)
     weights.append(layer_weights)
