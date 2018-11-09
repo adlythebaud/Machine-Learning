@@ -41,36 +41,40 @@ X_test = sc.transform(X_test)
 # 5. Decide how many layers and how many nodes per layer.
 
 # two layers (one hidden and one output, with 3 nodes in hidden layer)
-layers = [3,1]
+layers = [3,1,4]
 
 # 6. Create weights for each node in each layer
 weights = []
 print(np.asarray(weights).shape)
 for layer in layers:
-    # loop through each node, add a weight for every input from previous layer
+    
     print("layer: ", layer)
-    print(layers.index(layer))
+    
+    # loop through each node, add a weight for every input from previous layer
     layer_weights = []
     for i in range(layer):
         node_weights = []        
         # this for loop only needs to happen once. 
-        # TODO: Make this for loop happen only if we haven't created weights for first hidden layer.
+
 
         # if layer.index == 0.... 
         if layers.index(layer) == 0:
             for j in range(X_train.shape[1] + 1):
                 node_weights.append(random.uniform(0,1))
         
-        # else:....
+        else:
         # make weights for every node in PREVIOUS layer
-        
-        
+            for j in range(layers[layers.index(layer) - 1] + 1):
+                node_weights.append(random.uniform(0,1))
+            
+            
         layer_weights.append(node_weights)
     print("layer_weights: ", layer_weights)
     weights.append(layer_weights)
 
-#for weight in weights:
-#    print(weight)
+
+
+
 
 
 
