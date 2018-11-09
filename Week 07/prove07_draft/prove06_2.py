@@ -57,17 +57,43 @@ for i in np.unique(Y_train):
 zipped = zip(X_train, Y_train)
 zipped = list(zipped)
 
-for node in nodes:
-    # get training data
-    training_data = []
-    for zip_item in zipped:
-        if zip_item[1] == node.target_class:
-            training_data.append(zip_item[0])
-    
-    # fit data to each node's model
-    node.set_weights(weights)
-    node.fit([training_data[0]])
-    print(node.predict([training_data[0]]))
+#for node in nodes:
+#    # get training data
+#    training_data = []
+#    for zip_item in zipped:
+#        if zip_item[1] == node.target_class:
+#            training_data.append(zip_item[0])
+#    
+#    # fit data to each node's model
+#    node.set_weights(weights)
+#    node.fit(training_data)
+#    print(node.predict([training_data[0]]))
+
+# get training data
+training_class = 0
+training_data = []
+for zip_item in zipped:
+    if zip_item[1] == nodes[training_class].target_class:
+        training_data.append(zip_item[0])
+
+# fit data to each node's model
+nodes[training_class].set_weights(weights)
+nodes[training_class].fit(training_data)
+print(nodes[training_class].predict([training_data[0]]))
+
+# loop through arbitary number of hidden layer nodes:
+for i in range(3):
+    print(nodes[training_class].predict([training_data[0]]))
+
+
+# len = num attributes of x
+input_nodes = []
+
+hidden_nodes = []
+
+# one output node for yes or no on whether we hit our target class.
+# one output node per target class.
+output_node = Node()
 
 
     
