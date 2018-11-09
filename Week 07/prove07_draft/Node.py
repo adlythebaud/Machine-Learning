@@ -39,6 +39,13 @@ class Node():
                 # update weights
 #                for j in range(len(self.weights)):
 #                        self.weights[j] -= self.eta * (activation - self.target) * X_train[i][j]
+    def compute_activation(self, input):
+        h = 0
+        for i in (input * self.weights):
+            h += i
+        activation = 1 / (1 + exp(-h))
+        return activation
+        
       
     # this is to test if our weights are correct so we can predict the correct activation.
     def predict(self, X_test):

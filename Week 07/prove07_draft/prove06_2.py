@@ -19,7 +19,7 @@ from sklearn import datasets
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 import random
-from Node import Node
+
 
 
 # 1. Get data
@@ -33,67 +33,37 @@ y = iris.target
 X_train, X_test, Y_train, Y_test = train_test_split(
         x, y, test_size = .3, random_state = 0)
 
-
-
 # 4. feature Scaling
 sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
-# 5. Initialize weights
+# 5. Decide how many layers and how many nodes per layer.
+
+# two layers (one hidden and one output, with 3 nodes in hidden layer)
+layers = [3,1]
+
+# 6. Create weights for each node in each layer
 weights = []
-for i in range(X_train.shape[1]):
-    weights.append(random.uniform(-1,1))
-    
-# 6. Initialize our learning rate, eta
-eta = 0.0453
 
-# 7. TRAIN. 
-# create n nodes for n target classes:
-nodes = []
-for i in np.unique(Y_train):
-    nodes.append(Node(target_class = i, T = 5))
+for layer in layers:
+    # loop through each node, add a weight for every input from previous layer
+    print("layer: ", layer)
+    layer_weights = []
+    for i in range(layer):
+        node_weights = []        
+        # this for loop only needs to happen once. 
+        # TODO: Make this for loop happen only if we haven't created weights for first hidden layer.
+        for j in range(X_train.shape[1] + 1):
+            node_weights.append(random.uniform(0,1))
+        layer_weights.append(node_weights)
+    print("layer_weights: ", layer_weights)
+    weights.append(layer_weights)
 
-zipped = zip(X_train, Y_train)
-zipped = list(zipped)
-
-#for node in nodes:
-#    # get training data
-#    training_data = []
-#    for zip_item in zipped:
-#        if zip_item[1] == node.target_class:
-#            training_data.append(zip_item[0])
-#    
-#    # fit data to each node's model
-#    node.set_weights(weights)
-#    node.fit(training_data)
-#    print(node.predict([training_data[0]]))
-
-# get training data
-training_class = 0
-training_data = []
-for zip_item in zipped:
-    if zip_item[1] == nodes[training_class].target_class:
-        training_data.append(zip_item[0])
-
-# fit data to each node's model
-nodes[training_class].set_weights(weights)
-nodes[training_class].fit(training_data)
-print(nodes[training_class].predict([training_data[0]]))
-
-# loop through arbitary number of hidden layer nodes:
-for i in range(3):
-    print(nodes[training_class].predict([training_data[0]]))
+#for weight in weights:
+#    print(weight)
 
 
-# len = num attributes of x
-input_nodes = []
-
-hidden_nodes = []
-
-# one output node for yes or no on whether we hit our target class.
-# one output node per target class.
-output_node = Node()
 
 
     
