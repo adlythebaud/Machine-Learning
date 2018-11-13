@@ -61,7 +61,8 @@ for datapoint in zipped:
 
 # two layers (one hidden and one output, with 3 nodes in hidden layer)
 # this works, as long as you don't throw in a random layer with only one node in the middle.
-layers = [3,1]
+layers = [20,1]
+
 
 # 6. Create weights for each node in each layer
 weights = []
@@ -90,16 +91,42 @@ for layer in layers:
 
         
 # 7. set up feed forward
-# AUTOMATE THIS.
-a = []
-for i in range(layers[0]):
-    a.append(activation(np.dot(training_group[0][0][0], weights[0][i])))
-a.append(-1)
 
-print(a)
+def output(layer, weights, input, bias = False):
+    a = []
+    for i in range(layer):
+        a.append(activation(np.dot(input, weights[layers.index(layer)][i])))
+    if bias == True:
+        a.append(-1)
+    return a
+    
 
-b = []
-for i in range(layers[1]):
-    b.append(activation(np.dot(a, weights[1][i])))
+def compute(layers, weights, input):   
+    layer_results = []
+    actual_results = []
+    for layer in layers:        
+        if layers.index(layer) != (len(layers) - 1):            
+            # We're on a hidden layer
+            # make sure output is a list.
+            layer_results.append(output(layer, weights, input, True))
 
-print(b)
+        else:
+            # we're on output layer                    
+            actual_results.append(output(layer, weights, layer_results, False))
+            
+            
+    return actual_results
+  
+#GOAL: Compute activation depending on the layer we're on.      
+
+print(compute(layers, weights, training_group[0][0][0]))
+
+for i in range(np.asarray(training_group).shape[0]):
+    for j in training_group[i]:
+        print(compute(layers, weights, j[0]))
+
+
+#print(weights)
+
+
+
