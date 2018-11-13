@@ -90,41 +90,16 @@ for layer in layers:
 
         
 # 7. set up feed forward
-
+# AUTOMATE THIS.
 a = []
 for i in range(layers[0]):
     a.append(activation(np.dot(training_group[0][0][0], weights[0][i])))
 a.append(-1)
 
 print(a)
-output = 0
-sum = 0
-for i in a:
 
- 
+b = []
+for i in range(layers[1]):
+    b.append(activation(np.dot(a, weights[1][i])))
 
-
-# go through layers.
-
-
-
-        
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-    
-    
-    
-    
+print(b)
