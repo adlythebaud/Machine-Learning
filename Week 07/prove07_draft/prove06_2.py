@@ -20,7 +20,8 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 import random
 
-
+def activation(num):
+    return 1 / (1 + np.exp(-num))
 
 # 1. Get data
 iris = datasets.load_iris()
@@ -38,15 +39,22 @@ sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
-# 4.5 split training data based on target class
+# 4.5 split training data based on target class, 
+# add as an element -1 to each input
 zipped = zip(X_train, Y_train)
 training_group = []
 for i in np.unique(Y_train):
     training_group.append([])
-    
+
 
 for datapoint in zipped:
+    datapoint = np.asarray(datapoint)
+    datapoint = datapoint.tolist()
+    datapoint[0] = datapoint[0].tolist()
+    datapoint[0].append(-1)
+    datapoint[0] = np.asarray(datapoint[0])
     training_group[datapoint[1]].append(np.asarray(datapoint))
+
 
 
 # 5. Decide how many layers and how many nodes per layer.
@@ -59,7 +67,6 @@ layers = [3,1]
 weights = []
 
 for layer in layers:    
-#    print("layer: ", layer)
     # loop through each node, add a weight for every input from previous layer
     layer_weights = []
     for i in range(layer):
@@ -75,20 +82,37 @@ for layer in layers:
         else:
         # make weights for every node in PREVIOUS layer
             for j in range(layers[layers.index(layer) - 1] + 1):
-#                print("making weight from node_i ", j, " to node_j ", i)
                 node_weights.append(random.uniform(-1,1))
             
             
         layer_weights.append(node_weights)
-#    print("layer_weights: ", layer_weights)
     weights.append(layer_weights)
 
         
 # 7. set up feed forward
-# try it with training_group[0] first.
 
-for i in training_group[0]:
-    print(type(i))    
+a = []
+for i in range(layers[0]):
+    a.append(activation(np.dot(training_group[0][0][0], weights[0][i])))
+a.append(-1)
+
+print(a)
+output = 0
+sum = 0
+for i in a:
+
+ 
+
+
+# go through layers.
+
+
+
+        
+
+    
+
+
 
 
 
