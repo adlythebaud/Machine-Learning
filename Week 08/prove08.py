@@ -88,7 +88,11 @@ for layer in layers:
         layer_weights.append(node_weights)
     weights.append(layer_weights)
 
+
+
 # 7. Helper functions and initializations:
+eta = random.uniform(0,1)
+    
 def activation(num):
     return 1 / (1 + np.exp(-num))
 
@@ -96,15 +100,15 @@ def activation(num):
 def error(layers, layer, result, target, weights = [], error = 0):
     if (layers.index(layer) == (len(layers) - 1)):
         # computing error of output layer
-        print("computing output layer error")
         return result * (1 - result) * (result - target)
     else:
-        print("computing hidden layer error")
         return result * (1 - result) * np.dot(weights, error)
     return 0
 
-eta = random.uniform(0,1)   
-     
+def update_weights():
+    # weight_i_j -= eta * error of node j * activation of node i
+    return 0
+        
 # 8. set up feed forward
 def output(layer, weights, input, bias = False):
     a = []
@@ -138,10 +142,33 @@ def compute(layers, weights, input):
 # whether something is setosa (0) or not
 
 
-# 9. Update weights   
+# 9. Update weights
 results = compute(layers, weights, training_group[0][0][0])
 
-print(error(layers, layers[len(layers) - 1], results[1], 1))
+
+print("output: ", results[1])
+
+print("error: ", error(layers, layers[len(layers) - 1], results[1], 1))
+
+for i in reversed(layers):
+    for weight in weights[layers.index(i)]:        
+        for j in range(len(weight)):
+            weight[j] -= eta * error(layers, layers[len(layers) - 1], results[1], 1) * results[1]
+            
+
+
+
+            
+
+    
+    
+        
+        
+
+
+
+
+
 
 
 
