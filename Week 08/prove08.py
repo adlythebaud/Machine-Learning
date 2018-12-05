@@ -156,8 +156,6 @@ for i in reversed(layers):
             weight[j] -= eta * error(layers, layers[len(layers) - 1], results[1], 1) * results[1]
             
 
-
-
             
 
     
