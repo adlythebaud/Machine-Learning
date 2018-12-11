@@ -81,7 +81,7 @@ def get_recommendation(model, data, user_ids):
         
 
 
-#get_recommendation(model, data, users)
+get_recommendation(model, data, [200])
 
 
 
