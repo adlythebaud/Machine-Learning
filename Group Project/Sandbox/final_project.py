@@ -8,9 +8,10 @@ Created on Wed Dec  5 22:02:08 2018
 
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
 import random
 from statistics import mean
+import math
+
 
 data = pd.read_csv("newest500.csv")
 
@@ -36,9 +37,25 @@ user_profile = []
 for i in range(train.shape[1]):
     user_profile.append(mean(train[i]))
 
-print(user_profile)
+#print("User Profile: ", user_profile)
 
-# C
+# Compute cosine similarity between user profile and item profiles. Return top N cosine similarities and their corresponding URIs?
+
+similarities = []
+
+for i in test:
+    dp = np.dot(user_profile,i)
+    mag = np.linalg.norm(user_profile) * np.linalg.norm(i)
+    similarities.append(180 - math.degrees(np.arccos(dp / mag)))
+    
+similarities.sort()
+
+
+
+    
+
+    
+    
 
 
 
